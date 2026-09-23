@@ -632,3 +632,15 @@ dialog::backdrop {
     scroll-behavior: auto;
   }
 }
+
+/* Boutique commerce identity */
+:root { --bg: #f7f3ed; --panel: #fffaf3; --ink: #2b2723; --muted: #7f7468; --line: #e6d9ca; --accent: #b85c3a; }
+body { background: #f7f3ed; color: var(--ink); font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+.app-shell { background: #f7f3ed; }
+.sidebar, header { background: #315248; color: #fffaf3; }
+.brand { color: #f7dfbd; font-family: Georgia, serif; letter-spacing: .05em; }
+.panel, .stat, .product-card, .card, .login-card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 12px 30px rgba(91,62,39,.08); }
+button.primary, .cta { background: var(--accent); border-radius: 999px; }
+.page-heading h1, h1, h2 { font-family: Georgia, serif; font-weight: 500; letter-spacing: -.03em; }
+.tag { color: #315248; letter-spacing: .1em; }
+.fine, .eyebrow { color: var(--muted); }
