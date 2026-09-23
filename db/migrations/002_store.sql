@@ -1,0 +1,7 @@
+CREATE TABLE products(id uuid PRIMARY KEY DEFAULT gen_random_uuid(),name text NOT NULL,description text NOT NULL DEFAULT '',price_cents int NOT NULL CHECK(price_cents>0),stock int NOT NULL CHECK(stock>=0),category text NOT NULL DEFAULT 'Objetos',art text NOT NULL DEFAULT '◈');
+CREATE TABLE orders(id uuid PRIMARY KEY DEFAULT gen_random_uuid(),user_id uuid NOT NULL REFERENCES users(id),idempotency_key text NOT NULL,payload_hash text NOT NULL,total_cents int NOT NULL CHECK(total_cents>0),status text NOT NULL DEFAULT 'confirmed' CHECK(status IN ('confirmed','cancelled')),created_at timestamptz NOT NULL DEFAULT now(),UNIQUE(user_id,idempotency_key));
+CREATE TABLE order_items(order_id uuid NOT NULL REFERENCES orders(id),product_id uuid NOT NULL REFERENCES products(id),name text NOT NULL,quantity int NOT NULL CHECK(quantity>0),price_cents int NOT NULL CHECK(price_cents>0),PRIMARY KEY(order_id,product_id));
+CREATE TABLE outbox(id uuid PRIMARY KEY DEFAULT gen_random_uuid(),event_type text NOT NULL,payload jsonb NOT NULL,created_at timestamptz NOT NULL DEFAULT now(),published_at timestamptz);
+CREATE INDEX outbox_pending ON outbox(created_at) WHERE published_at IS NULL;
+CREATE TABLE inbox(event_id uuid PRIMARY KEY,processed_at timestamptz NOT NULL DEFAULT now());
+CREATE TABLE notifications(event_id uuid PRIMARY KEY REFERENCES inbox(event_id),order_id uuid NOT NULL REFERENCES orders(id),body text NOT NULL,created_at timestamptz NOT NULL DEFAULT now());
